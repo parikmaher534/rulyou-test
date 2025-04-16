@@ -1,0 +1,42 @@
+services:
+  database:
+      image: "mysql:5.7"
+      platform: linux/amd64
+      volumes:
+        - mysql-volume:/var/lib/mysql:rw
+        - ./mysql-db:/docker-entrypoint-initdb.d/
+      env_file: ./.env
+      environment:
+        - MYSQL_ROOT_PASSWORD=$DATABASE_PASSWORD
+        - MYSQLDB_USER=$DATABASE_USER
+        - MYSQLDB_DATABASE=$DATABASE_NAME
+      ports:
+        - $DATABASE_LOCAL_PORT:$DATABASE_DOCKER_PORT
+
+  migration:
+    build: './'
+    command: npm run migration:run
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: on-failure
+
+  api:
+    build: './'
+    command: npm run start:prod
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $APP_LOCAL_PORT:$APP_DOCKER_PORT
+    environment:
+      - DATABASE_HOST=$DATABASE_HOST
+      - DATABASE_USERNAME=$DATABASE_USERNAME
+      - DATABASE_PASSWORD=$DATABASE_PASSWORD
+      - DATABASE_NAME=$DATABASE_NAME
+    depends_on:
+      migration:
+        condition: service_completed_successfully
+
+volumes:
+  mysql-volume:
+
