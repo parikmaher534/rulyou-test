@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { SuccessResponse } from '@/src/dto';
 
 class ResponseResult {
-  @ApiProperty({ type: 'string', format: 'uuid' })
+  @ApiProperty({ type: 'string' })
   id: string;
 }
 

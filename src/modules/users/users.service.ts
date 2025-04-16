@@ -14,7 +14,7 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
-  public async getUsersList(query): Promise<DTO.GetUserResponse> {
+  public async getUsersList(query): Promise<DTO.GetUsersListResponse> {
     try {
       const result = await this.userRepository.findBy({ ...query });
 
@@ -61,7 +61,7 @@ export class UsersService {
     }
   }
 
-  public async updateUser({ id }: DTO.UpdateUserParams, data: DTO.UpdateUserRequest) {
+  public async updateUser({ id }: DTO.UpdateUserParams, data: DTO.UpdateUserRequest): Promise<DTO.UpdateUserResponse> {
     try {
       /* По-хорошему нужен декоратор для проверки таких вещей */
       if (Object.keys(data).length === 0) {
@@ -87,7 +87,7 @@ export class UsersService {
     }
   }
 
-  public async deleteUser({ id }) {
+  public async deleteUser({ id }: DTO.DeleteUserRequest): Promise<DTO.DeleteUserResponse> {
     try {
       const user = await this.userRepository.findOneBy({ id });
 

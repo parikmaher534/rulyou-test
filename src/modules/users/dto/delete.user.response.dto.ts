@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { SuccessResponse } from '@/src/dto';
 
-class UserItem {
+class DeleteResponseResult {
   @ApiProperty({ type: 'string' })
   id: string;
 
@@ -16,12 +16,7 @@ class UserItem {
   efficiency: number;
 }
 
-class UsersList {
-  @ApiProperty({ type: UserItem, isArray: true })
-  users: UserItem[];
-}
-
-export class GetUserResponse extends SuccessResponse {
-  @ApiProperty({ type: UsersList })
-  result: UsersList;
+export class DeleteUserResponse extends SuccessResponse {
+  @ApiProperty({ type: DeleteResponseResult })
+  result: DeleteResponseResult;
 }
